@@ -3,6 +3,22 @@ services:
   app:
     container_name: containerize_app_1
     # your code goes here ...
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: gunicorn --bind 0.0.0.0:8000 server:app --reload
+    volumes:
+      - /Users/phineas/mywork/ad-hoc/containerize/app/src:/home/app/web
   nginx:
     container_name: containerize_nginx_1
     # your code goes here ...
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - /Users/phineas/mywork/ad-hoc/containerize/nginx/files:/etc/certs
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - app
